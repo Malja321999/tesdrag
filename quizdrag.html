@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Add CSS styles for the draggable elements */
+        .draggable {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: #f2f2f2;
+            cursor: move;
+        }
+
+        /* Add CSS styles for the drop zone */
+        .dropzone {
+            min-height: 50px;
+            border: 2px dashed #ccc;
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Sort the numbers from low to high</h2>
+    <div id="sortable">
+        <div class="draggable" draggable="true" ondragstart="drag(event)">3</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)">1</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)">2</div>
+    </div>
+    <div id="dropzone" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <button onclick="checkAnswer()">Check Answer</button>
+
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.textContent);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.textContent += data + ' ';
+        }
+
+        function checkAnswer() {
+            var sortedNumbers = document.getElementById('dropzone').textContent.trim().split(' ').map(Number);
+            var isSorted = sortedNumbers.every((val, i, arr) => !i || val >= arr[i - 1]);
+            if (isSorted) {
+                alert('Correct!');
+            } else {
+                alert('Incorrect!');
+            }
+        }
+    </script>
+</body>
+
+</html>
