@@ -1,63 +1,47 @@
-// Part 2: Drag & drop elements
+const numbers = document.querySelectorAll(".number");
+const answerZone = document.querySelector(".answer-zone");
 
-var draggedElement = null;
-var items;
-
-function handleDragStart(e) {
-  this.style.opacity = "0.4";
-  draggedElement = this;
-
-  e.dataTransfer.effectAllowed = "move";
-  e.dataTransfer.setData("item", this.innerHTML);
-}
-
-function handleDragOver(e) {
-  if (e.preventDefault) e.preventDefault();
-
-  e.dataTransfer.dropEffect = "move";
-  return false;
-}
-
-function handleDragEnter(e) {
-  this.classList.add("dragover");
-}
-
-function handleDragLeave(e) {
-  this.classList.remove("dragover");
-}
-
-function handleDrop(e) {
-  if (e.stopPropagation) e.stopPropagation();
-
-  if (draggedElement != this) {
-    draggedElement.innerHTML = this.innerHTML;
-    draggedElement.setAttribute("data-item", this.innerHTML);
-
-    let replacedItem = e.dataTransfer.getData("item");
-    this.innerHTML = replacedItem;
-    this.setAttribute("data-item", replacedItem);
-  }
-
-  return false;
-}
-
-function handleDragEnd(e) {
-  this.style.opacity = "1";
-
-  items.forEach(function (item) {
-    item.classList.remove("dragover");
+numbers.forEach((number) => {
+  number.addEventListener("dragstart", () => {
+    number.classList.add("dragging");
   });
-}
 
-document.addEventListener("DOMContentLoaded", (event) => {
-  items = document.querySelectorAll(".container .box");
-
-  items.forEach(function (item) {
-    item.addEventListener("dragstart", handleDragStart);
-    item.addEventListener("dragenter", handleDragEnter);
-    item.addEventListener("dragover", handleDragOver);
-    item.addEventListener("dragleave", handleDragLeave);
-    item.addEventListener("drop", handleDrop);
-    item.addEventListener("dragend", handleDragEnd);
+  number.addEventListener("dragend", () => {
+    number.classList.remove("dragging");
   });
 });
+
+answerZone.addEventListener("dragover", (event) => {
+  event.preventDefault();
+});
+
+answerZone.addEventListener("drop", (event) => {
+  const draggedNumber = document.querySelector(".dragging");
+  answerZone.appendChild(draggedNumber);
+});
+
+function checkAnswer() {
+  const sortedNumbers = Array.from(answerZone.children).map((child) =>
+    parseInt(child.innerText)
+  );
+  const originalNumbers = [-1, -3, -5, -7]; // Original sorted numbers
+  if (JSON.stringify(sortedNumbers) === JSON.stringify(originalNumbers)) {
+    alert("Correct!");
+  } else {
+    alert("Incorrect. Try again!");
+  }
+}
+
+function resetQuiz() {
+  const allNumbers = document.querySelectorAll(".number");
+  const originalNumbersContainer = document.querySelector(".numbers");
+  const answerZone = document.querySelector(".answer-zone");
+
+  // Clear the answer zone
+  answerZone.innerHTML = "";
+
+  // Reset the numbers to original position
+  allNumbers.forEach((number) => {
+    originalNumbersContainer.appendChild(number);
+  });
+}

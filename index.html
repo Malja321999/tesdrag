@@ -4,61 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Add CSS styles for the draggable elements */
-        .draggable {
-            display: inline-block;
-            padding: 10px;
-            margin: 5px;
-            background-color: #f2f2f2;
-            cursor: move;
-        }
-
-        /* Add CSS styles for the drop zone */
-        .dropzone {
-            min-height: 50px;
-            border: 2px dashed #ccc;
-            margin: 5px;
-            padding: 10px;
-        }
-    </style>
+    <title>Drag and Drop Quiz</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
+<style>
+    .quiz-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .numbers {
+        display: flex;
+    }
+
+    .number {
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+
+    .answer-zone {
+        width: 200px;
+        height: 50px;
+        margin: 20px 0;
+        border: 1px dashed black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
 <body>
-    <h2>Sort the numbers from low to high</h2>
-    <div id="sortable">
-        <div class="draggable" draggable="true" ondragstart="drag(event)">3</div>
-        <div class="draggable" draggable="true" ondragstart="drag(event)">1</div>
-        <div class="draggable" draggable="true" ondragstart="drag(event)">2</div>
+
+    <div class="quiz-container">
+        <div class="numbers">
+            <div class="number" draggable="true">-5</div>
+            <div class="number" draggable="true">-3</div>
+            <div class="number" draggable="true">-7</div>
+            <div class="number" draggable="true">-1</div>
+        </div>
+        <div class="answer-zone"></div>
+        <button onclick="checkAnswer()">Check Answer</button>
+        <br>
+        <button onclick="resetQuiz()">Reset Quiz</button>
     </div>
-    <div id="dropzone" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-    <button onclick="checkAnswer()">Check Answer</button>
 
-    <script>
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.textContent);
-        }
-
-        function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.textContent += data + ' ';
-        }
-
-        function checkAnswer() {
-            var sortedNumbers = document.getElementById('dropzone').textContent.trim().split(' ').map(Number);
-            var isSorted = sortedNumbers.every((val, i, arr) => !i || val >= arr[i - 1]);
-            if (isSorted) {
-                alert('Correct!');
-            } else {
-                alert('Incorrect!');
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
